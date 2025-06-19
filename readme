@@ -1,0 +1,11 @@
+Flask web app
+INPUTS:
+    An MP4 video or link 
+    One or more face images of a specific person (front, left, and right profiles)
+OBJECTIVE:
+    From the uploaded video, detect and extract all video frames where the given person appears, using face recognition (TensorFlow model), and display:
+        1.The frame(s) where the person appears
+        2.The timestamp of each frame
+
+STEP-BY-STEP:
+     Video Preprocessing---->Face Model Integration---->Frame-by-Frame Face Detection----> Flask Integration
