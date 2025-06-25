@@ -27,8 +27,11 @@ The app extracts frames where any uploaded face matches appear.
 ## Screenshots
 
 ### Upload Interface
+![image](https://github.com/user-attachments/assets/baf7092a-43ff-432a-a81b-f8b08eae1b8e)
+
 
 ### Detection Results
+![image](https://github.com/user-attachments/assets/25db127b-f497-4f04-85df-c59269cecbb8)
 
 
 ## ⚙️ Tech Stack
