@@ -1,0 +1,7 @@
+Flask==3.0.3
+numpy==1.26.4
+opencv-python==4.9.0.80
+keras-facenet==0.3.2
+mtcnn==0.1.1
+Pillow==10.3.0
+yt-dlp==2024.4.9
