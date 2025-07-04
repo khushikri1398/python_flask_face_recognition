@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Select Faces</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-4 text-center">Select Faces to Track</h2>
+    <form method="POST">
+      <input type="hidden" name="frame_skip" value="{{ frame_skip }}">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {% for face in faces %}
+          <div class="text-center">
+            <label>
+              <img src="{{ url_for('static', filename='faces/' + face) }}"
+     class="w-32 h-32 object-cover rounded border mb-2" />
+
+              <br>
+              <input type="checkbox" name="faces" value="{{ face }}"> Face {{ loop.index }}
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="text-center mt-6">
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Find Timestamps</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

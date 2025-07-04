@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Results</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-6 text-center">Detected Face Matches</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+      {% for img, time in results %}
+        <div class="text-center">
+          <img src="{{ url_for('static', filename='matches/' + img) }}" class="w-24 h-24 object-cover rounded border mx-auto" />
+          <p class="mt-2 text-sm text-gray-700 font-medium">{{ time }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
