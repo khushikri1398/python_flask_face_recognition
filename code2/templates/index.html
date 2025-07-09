@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Upload Video</title>
+  <title>Upload Videos</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-6">
   <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
-    <h2 class="text-xl font-bold mb-4">Upload a Video or Paste YouTube Link</h2>
+    <h2 class="text-xl font-bold mb-4">Upload Videos or Paste YouTube Links</h2>
     <form method="POST" enctype="multipart/form-data">
-      <label class="block mb-2">YouTube URL:</label>
+      <label class="block mb-2">YouTube URLs (comma separated):</label>
       <input type="text" name="youtube_url" class="w-full p-2 border rounded mb-4" />
 
-      <label class="block mb-2">Or upload video:</label>
-      <input type="file" name="video" class="mb-4" />
+      <label class="block mb-2">Upload MP4 Videos:</label>
+      <input type="file" name="videos" multiple class="mb-4" accept="video/mp4" />
 
-      <label class="block mb-2">Frame Skip:</label>
-      <input type="number" name="frame_skip" value="5" class="w-20 p-2 border rounded mb-4" />
-
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Extract Faces</button>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">
+        Generate Clip Previews
+      </button>
     </form>
   </div>
 </body>

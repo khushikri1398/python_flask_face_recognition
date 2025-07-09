@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Select Clips</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="application/json" id="effectParams">
+    {{ effectParams | default({}) | tojson }}
+  </script>
+  <script>
+    const effectParams = JSON.parse(document.getElementById('effectParams').textContent);
+
+    function showParams() {
+      const effect = document.getElementById("effect").value;
+      const paramDiv = document.getElementById("effect-parameters");
+      paramDiv.innerHTML = "";
+      (effectParams[effect] || []).forEach(p => {
+        const label = document.createElement("label");
+        label.innerText = p;
+        label.className = "block mt-2";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = `param_${p}`;
+        input.className = "w-full p-2 border rounded";
+        paramDiv.appendChild(label);
+        paramDiv.appendChild(input);
+      });
+    }
+
+    function toggleAll(source) {
+      document.querySelectorAll("input[type=checkbox][name=selected_clips]").forEach(cb => cb.checked = source.checked);
+    }
+  </script>
+</head>
+
+<body class="bg-gray-100 p-6">
+  <div class="max-w-6xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-4 text-center">Select Clips to Include in Final Video</h2>
+
+    <form method="POST" action="/finalize_video">
+      <label class="block mb-2">
+        <input type="checkbox" onclick="toggleAll(this)"> Select All Clips
+      </label>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {% for preview in previews %}
+        {% set gif = preview[0] %}
+        {% set video_path = preview[1] %}
+        {% set timestamp = preview[2] %}
+        {% set idx = loop.index0 %}
+        <div class="text-center">
+          <label>
+            <img src="{{ url_for('static', filename='clips/' + gif) }}"
+              class="rounded border mb-2 w-full h-32 object-cover" />
+            <br>
+            <input type="checkbox" name="selected_clips" value="{{ idx }}"> {{ timestamp | round(2) }}s
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+
+      <input type="hidden" name="matches_json" value='{{ previews | tojson }}'>
+
+      <div class="mt-6">
+        <label class="block mb-1 font-semibold">Transition:</label>
+        <select name="transition" class="w-full p-2 border rounded">
+          <option value="none">None</option>
+          <option value="fade">Fade</option>
+        </select>
+
+        <label class="block mt-4 font-semibold">Visual Effect:</label>
+        <select name="effect" id="effect" class="w-full p-2 border rounded" onchange="showParams()">
+          {% for fx in effectParams.keys() %}
+          <option value="{{ fx }}">{{ fx }}</option>
+          {% endfor %}
+        </select>
+
+        <div id="effect-parameters" class="mt-4"></div>
+
+        <label class="block mt-4 font-semibold">Audio:</label>
+        <select name="with_audio" class="w-full p-2 border rounded">
+          <option value="yes">With Audio</option>
+          <option value="no">Without Audio</option>
+        </select>
+      </div>
+
+      <!-- 🎵 Music Selection Section -->
+      <div class="mt-8">
+        <h3 class="text-lg font-bold mb-2">Select Background Music (Optional)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% for music in music_files %}
+          <div class="border p-3 rounded bg-gray-50">
+            <label class="flex items-center space-x-2 mb-2">
+              <input type="radio" name="music_file" value="{{ music }}">
+              <span>{{ music }}</span>
+            </label>
+            <audio controls class="w-full">
+              <source src="{{ url_for('static', filename='music/' + music + '.mp3') }}" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="text-center mt-6">
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Generate Final Video</button>
+      </div>
+    </form>
+  </div>
+  <script>showParams();</script>
+</body>
+
+</html>
