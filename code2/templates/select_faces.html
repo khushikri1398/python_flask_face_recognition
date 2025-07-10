@@ -4,29 +4,88 @@
   <meta charset="UTF-8" />
   <title>Select Faces</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="application/json" id="effectParams">
+{{ effectParams | default({}) | tojson }}
+</script>
+
+  <script>
+    const effectParams = JSON.parse(document.getElementById('effectParams').textContent);
+
+    function showParams() {
+      const effect = document.getElementById("effect").value;
+      const paramDiv = document.getElementById("effect-parameters");
+      paramDiv.innerHTML = "";
+      (effectParams[effect] || []).forEach(p => {
+        const label = document.createElement("label");
+        label.innerText = p;
+        label.className = "block mt-2";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = `param_${p}`;
+        input.className = "w-full p-2 border rounded";
+        paramDiv.appendChild(label);
+        paramDiv.appendChild(input);
+      });
+    }
+    function toggleAll(source) {
+      document.querySelectorAll("input[type=checkbox][name=faces]").forEach(cb => cb.checked = source.checked);
+    }
+  </script>
 </head>
 <body class="bg-gray-100 p-6">
   <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow">
     <h2 class="text-xl font-bold mb-4 text-center">Select Faces to Track</h2>
-    <form method="POST">
+    <form method="POST" action="/process_faces">
       <input type="hidden" name="frame_skip" value="{{ frame_skip }}">
+      {% for video in videos %}
+        <input type="hidden" name="videos" value="{{ video }}">
+      {% endfor %}
+
+      <label class="block mb-2">
+        <input type="checkbox" onclick="toggleAll(this)"> Select All Faces
+      </label>
+
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {% for face in faces %}
           <div class="text-center">
             <label>
               <img src="{{ url_for('static', filename='faces/' + face) }}"
-     class="w-32 h-32 object-cover rounded border mb-2" />
-
+                   class="w-32 h-32 object-cover rounded border mb-2" />
               <br>
               <input type="checkbox" name="faces" value="{{ face }}"> Face {{ loop.index }}
             </label>
           </div>
         {% endfor %}
       </div>
+
+      <div class="mt-6">
+        <label class="block mb-1 font-semibold">Transition:</label>
+        <select name="transition" class="w-full p-2 border rounded">
+          <option value="none">None</option>
+          <option value="fade">Fade</option>
+        </select>
+
+        <label class="block mt-4 font-semibold">Visual Effect:</label>
+        <select name="effect" id="effect" class="w-full p-2 border rounded" onchange="showParams()">
+          {% for fx in effectParams.keys() %}
+            <option value="{{ fx }}">{{ fx }}</option>
+          {% endfor %}
+        </select>
+
+        <div id="effect-parameters" class="mt-4"></div>
+
+        <label class="block mt-4 font-semibold">Audio:</label>
+        <select name="with_audio" class="w-full p-2 border rounded">
+          <option value="yes">With Audio</option>
+          <option value="no">Without Audio</option>
+        </select>
+      </div>
+
       <div class="text-center mt-6">
-        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Find Timestamps</button>
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Generate Video</button>
       </div>
     </form>
   </div>
+  <script>showParams();</script>
 </body>
-</html>
+</html> 
