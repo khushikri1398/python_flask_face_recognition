@@ -1,9 +1,3 @@
-**Answer:**
-
-Here’s a clear and structured `README.md` for your Flask + MoviePy + Face Recognition project.
-
----
-
 ````markdown
 # 🎬 Face-Based Video Clip Editor
 
