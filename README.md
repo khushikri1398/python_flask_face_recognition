@@ -1,4 +1,5 @@
 ````markdown
+
 # 🎬 Face-Based Video Clip Editor
 
 This project is a **Flask web application** that processes uploaded videos, detects unique faces, generates preview GIFs, and allows you to stitch selected clips together with **visual effects**, **transitions**, and **background music**.  
